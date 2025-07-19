@@ -12,10 +12,12 @@ type Fetcher struct {
 	repo       *db.Repository
 }
 
+// NewFetcher creates a new Fetcher instance with the provided CoinCap API client and database repository.
 func NewFetcher(coinClient *coin.Client, repo *db.Repository) *Fetcher {
 	return &Fetcher{coinClient, repo}
 }
 
+// FetchAndStore retrieves cryptocurrency assets from the CoinCap API and stores them in the database.
 func (f *Fetcher) FetchAndStore() error {
 	assets, err := f.coinClient.FetchAssets()
 	if err != nil {

@@ -11,6 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// run initializes the database, fetches data from the CoinCap API, and starts the HTTP server.
 func run(apiKey, dsn string) error {
 	database, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
@@ -37,6 +38,9 @@ func run(apiKey, dsn string) error {
 	return r.Run(":8080")
 }
 
+// main is the entry point of the application.
+// It reads the API key and database connection string from environment variables,
+// initializes the database, fetches data from the CoinCap API, and starts the HTTP server.
 func main() {
 	apiKey := os.Getenv("COINCAP_API_KEY")
 	postgresDSN := os.Getenv("POSTGRES_DSN")

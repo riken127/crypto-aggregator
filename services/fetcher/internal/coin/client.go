@@ -6,11 +6,13 @@ import (
 	"net/http"
 )
 
+// Asset represents a cryptocurrency asset with its details.
 type Client struct {
 	apiKey string
 	apiURL string
 }
 
+// NewClient creates a new CoinCap API client with the provided API key.
 func NewClient(apiKey string) *Client {
 	return &Client{
 		apiKey: apiKey,
@@ -18,7 +20,7 @@ func NewClient(apiKey string) *Client {
 	}
 }
 
-// Para testes, permite criar um client customizado
+// NewClientWithURL creates a new CoinCap API client with the provided API key and custom URL (testing purposes).
 func NewClientWithURL(apiKey, apiURL string) *Client {
 	return &Client{
 		apiKey: apiKey,
@@ -26,6 +28,7 @@ func NewClientWithURL(apiKey, apiURL string) *Client {
 	}
 }
 
+// FetchAssets retrieves the list of cryptocurrency assets from the CoinCap API.
 func (c *Client) FetchAssets() ([]Asset, error) {
 	url := fmt.Sprintf("%s?apiKey=%s", c.apiURL, c.apiKey)
 	resp, err := http.Get(url)
