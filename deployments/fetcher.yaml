@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: fetcher
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: fetcher
+              image: crypto-aggregator-fetcher:latest
+              env:
+                - name: REDIS_HOST
+                  value: "redis"
+                - name: PG_HOST
+                  value: "postgres"
+                - name: PG_PORT
+                  value: "5432"
+                - name: PG_USER
+                  value: "postgres"
+                - name: PG_PASSWORD
+                  value: "postgres"
+                - name: PG_DATABASE
+                  value: "crypto"
+          restartPolicy: OnFailure
