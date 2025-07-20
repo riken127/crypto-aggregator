@@ -18,6 +18,7 @@ async function createServer() {
         rootValue: root,
         graphiql: true
     }));
+
     app.get('/healthz', (req, res) => res.json({ status: 'ok' }));
     return app;
 }

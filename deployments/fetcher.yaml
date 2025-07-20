@@ -13,8 +13,10 @@ spec:
               image: crypto-aggregator-fetcher:latest
               imagePullPolicy: IfNotPresent
               env:
-              - name: COINCAP_API_KEY
-                value: ""
-              - name: POSTGRES_DSN
-                value: "host=postgres user=postgres password=postgres dbname=crypto port=5432 sslmode=disable"
+                - name: COINCAP_API_KEY
+                  value: ""
+                - name: POSTGRES_DSN
+                  value: "host=postgres user=postgres password=postgres dbname=crypto port=5432 sslmode=disable"
           restartPolicy: OnFailure
+    successfulJobsHistoryLimit: 3
+    failedJobsHistoryLimit: 1
