@@ -4,9 +4,9 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/seuusuario/crypto-aggregator-fetcher/internal/coin"
-	"github.com/seuusuario/crypto-aggregator-fetcher/internal/db"
-	"github.com/seuusuario/crypto-aggregator-fetcher/internal/fetcher"
+	"github.com/riken127/crypto-aggregator-fetcher/internal/coin"
+	"github.com/riken127/crypto-aggregator-fetcher/internal/db"
+	"github.com/riken127/crypto-aggregator-fetcher/internal/fetcher"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )

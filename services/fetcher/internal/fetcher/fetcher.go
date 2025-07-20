@@ -3,8 +3,9 @@ package fetcher
 import (
 	"time"
 
-	"github.com/seuusuario/crypto-aggregator-fetcher/internal/coin"
-	"github.com/seuusuario/crypto-aggregator-fetcher/internal/db"
+	"github.com/riken127/crypto-aggregator-fetcher/internal/coin"
+	"github.com/riken127/crypto-aggregator-fetcher/internal/db"
+	"github.com/riken127/crypto-aggregator-fetcher/internal/temporal"
 )
 
 type Fetcher struct {
@@ -42,9 +43,32 @@ func (f *Fetcher) FetchAndStore() error {
 			MaxSupply:         a.MaxSupply,
 			Supply:            a.Supply,
 		}
+
 		if err := f.repo.SaveAssetWithRecord(asset, record); err != nil {
 			return err
 		}
 	}
+
+	var temporalAssets []temporal.Asset
+
+	for _, a := range assets {
+		temporalAsset := temporal.Asset{
+			ID:                a.ID,
+			Symbol:            a.Symbol,
+			Name:              a.Name,
+			Explorer:          a.Explorer,
+			PriceUsd:          a.PriceUsd,
+			VolumeUsd24Hr:     a.VolumeUsd24Hr,
+			ChangePercent24Hr: a.ChangePercent24Hr,
+			MarketCapUsd:      a.MarketCapUsd,
+			Vwap24Hr:          a.Vwap24Hr,
+			MaxSupply:         a.MaxSupply,
+			Supply:            a.Supply,
+		}
+		temporalAssets = append(temporalAssets, temporalAsset)
+	}
+
+	temporal.StartAggregatorWorkflow(temporalAssets)
+
 	return nil
 }
