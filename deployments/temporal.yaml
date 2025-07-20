@@ -1,0 +1,81 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: temporal-config
+data:
+  docker.yaml: |
+    persistence:
+      defaultStore: default
+      visibilityStore: visibility
+      datastores:
+        default:
+          cassandra:
+            hosts: "cassandra"
+            keyspace: temporal
+        visibility:
+          cassandra:
+            hosts: "cassandra"
+            keyspace: temporal_visibility
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: temporal
+spec:
+  selector:
+    app: temporal
+  ports:
+    - port: 7233
+      targetPort: 7233
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temporal
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: temporal
+  template:
+    metadata:
+      labels:
+        app: temporal
+    spec:
+      volumes:
+        - name: config-volume
+          configMap:
+            name: temporal-config
+      containers:
+        - name: temporal
+          image: temporalio/auto-setup:latest
+          ports:
+            - containerPort: 7233
+          env:
+            - name: TEMPORAL_BROADCAST_ADDRESS
+              value: "temporal:7233"
+            - name: TEMPORAL_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: TEMPORAL_SERVICE_ADDRESS
+              value: "temporal:7233"
+            - name: CASSANDRA_SEEDS
+              value: "cassandra"
+            - name: CASSANDRA_PORT
+              value: "9042"
+            - name: TEMPORAL_CONFIG_DIR
+              value: "/etc/temporal/config"
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "500m"
+            limits:
+              memory: "512Mi"
+              cpu: "1"
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/temporal/config

@@ -18,5 +18,5 @@ spec:
                 - name: POSTGRES_DSN
                   value: "host=postgres user=postgres password=postgres dbname=crypto port=5432 sslmode=disable"
           restartPolicy: OnFailure
-    successfulJobsHistoryLimit: 3
-    failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
